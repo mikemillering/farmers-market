@@ -11,6 +11,12 @@ function checkMoney() {
   {newAmount < 0 ? (alert(`You don't have that much money.`),setInput('')):(purchase(cost), setInput(''))}
 }
 
+function checkMoneyAll() {
+  let max = Math.floor(props.dollars/props.veggieNum);
+  let cost = max * props.veggieNum;
+  {max === 0 ? (alert(`You don't have enough money to buy any.`),setInput('')):(purchase(cost), props.setItem(max), setInput(''))}
+}
+
 function purchase(cost: number) {
   let newBalance = props.dollars - cost
   props.setDollars(newBalance)
@@ -18,10 +24,18 @@ function purchase(cost: number) {
   props.setItem(updatedNum)
 }
 
-function seller() {
+function sell() {
   let newNum = Number(props.quantity) - Number(input);
   let newDollars = (Number(input) * props.veggieNum) + props.dollars;
   newNum >= 0 ? (props.setItem(newNum), props.setDollars(newDollars)) : alert('You have ' + props.quantity +' '+ props.name);
+  setInput('')
+}
+
+function sellAll() {
+  let totalSale = (props.quantity*props.veggieNum);
+  let newDollars =  totalSale + Number(props.dollars);
+  props.setDollars(newDollars)
+  props.setItem(0)
   setInput('')
 }
 
@@ -72,7 +86,13 @@ const numChecker = (e: any) => {
             <button className="btn btn-outline-success" onClick={checkMoney}>Buy</button>
             </div>
             <div className='col'>
-            <button className="btn btn-outline-danger" onClick={seller}>Sell</button>
+            <button className="btn btn-outline-danger" onClick={sell}>Sell</button>
+            </div>
+            <div className="col">
+            <button className="btn btn-outline-warning" onClick={checkMoneyAll}>Buy All</button>
+            </div>
+            <div className='col'>
+            <button className="btn btn-outline-warning" onClick={sellAll}>Sell All</button>
             </div>
         </div>
       </form>

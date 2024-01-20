@@ -10,7 +10,7 @@ export default function App() {
   const randEggplant = Math.floor(Math.random() * (110 - 70 + 1)) + 70;
 
   const [random, setRandom] = useState(randomNum);
-  const [dollars, setDollars] = useState(100);
+  const [dollars, setDollars] = useState(10000);
   const [days, setDays] = useState(10);
   const [tomatoes, setTomatoes] = useState(0);
   const [tomatoesNum, setTomatoesNum] = useState(randTomato);
@@ -40,35 +40,59 @@ export default function App() {
   );
 
   function nextDay() {
+    const oneInThree = Math.floor(Math.random() * 3) === 0;
+    const oddsNum = Math.floor(Math.random() * (3 - 2 + 1)) + 1;
+
     setTomatoesNum(randTomato);
     setCarrotsNum(randCarrot);
     setLettuceNum(randLettuce);
     setEggplantNum(randEggplant);
     setRandom(randomNum);
   
-    // Generate a random number to determine if one child's veggie should be doubled
-    const shouldDouble = Math.floor(Math.random() * 3) === 0;
-  
-    // Double the veggieNum of a randomly chosen child
-    if (shouldDouble) {
+    if (oneInThree) {
       const randomChild = Math.floor(Math.random() * 4); // 4 children (tomatoes, carrots, lettuce, eggplant)
   
       switch (randomChild) {
         case 0:
-          setTomatoesNum(tomatoesNum * 2);
           alert("Tomatoes price doubled!");
+          setTomatoesNum(tomatoesNum * 2);
           break;
         case 1:
-          setCarrotsNum(carrotsNum * 2);
-          alert("Rabbits invaded the farmers market and eaten many carrots! Prices increased!");
+          alert("Rabbits invaded the farmers market and at your competetors carrots! Prices increased!");
+          setCarrotsNum(carrotsNum * oddsNum);
           break;
         case 2:
-          setLettuceNum(lettuceNum * 2);
           alert("Lettuce celebrate, lettuce prices have skyrocketed!");
+          setLettuceNum(lettuceNum * oddsNum);
           break;
         case 3:
-          setEggplantNum(eggplantNum * 2);
-          alert("");
+          alert("Eggplant blight! Eggplant prices are egg-stremely high!");
+          setEggplantNum(eggplantNum * oddsNum);
+          break;
+        default:
+          break;
+      }
+    }
+    const oneInTwo = Math.floor(Math.random() * 2) === 0;
+    if (oneInTwo) {
+      const randomChild = Math.floor(Math.random() * 4); // 4 children (tomatoes, carrots, lettuce, eggplant)
+  
+      switch (randomChild) {
+        case 0:
+          alert("Some of your tomatoes rolled away!");
+          setTomatoes(Math.round(tomatoes / 1.3));
+          break;
+        case 1:
+          alert("Rabbits invaded your booth. They ate some of your carrots!");
+          setCarrots(Math.round(carrots / 1.2));
+          break;
+        case 2:
+          alert("Some of your lettuce went rotten!");
+          setLettuce(Math.round(lettuce / 1.1));
+          break;
+        case 3:
+          alert("Your Eggplant inventory magically doubled! How did that happen?");
+          setEggplant(eggplant * 2);
           break;
         default:
           break;
@@ -81,6 +105,10 @@ export default function App() {
       alert("Congrats! You ended up with $" + dollars + " dollars.");
       setDays(10);
       setDollars(100);
+      setTomatoes(0);
+      setCarrots(0);
+      setLettuce(0);
+      setEggplant(0);
     } else {
       setDays(newDays);
     }
