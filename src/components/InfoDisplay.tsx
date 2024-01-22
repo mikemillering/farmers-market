@@ -1,27 +1,21 @@
 import React, { useState } from "react";
 
 export default function InfoDisplay(props: any) {
+
   const [input, setInput] = useState('');
 
-
-function checkMoney() {
+{/*Button Functions*/}
+function buy() {
   let numInput = Number(input);
   let cost = numInput * props.veggieNum;
   let newAmount = props.dollars - cost;
   {newAmount < 0 ? (alert(`You don't have that much money.`),setInput('')):(purchase(cost), setInput(''))}
 }
 
-function checkMoneyAll() {
+function buyAll() {
   let max = Math.floor(props.dollars/props.veggieNum);
   let cost = max * props.veggieNum;
-  {max === 0 ? (alert(`You don't have enough money to buy any.`),setInput('')):(purchase(cost), props.setItem(max), setInput(''))}
-}
-
-function purchase(cost: number) {
-  let newBalance = props.dollars - cost
-  props.setDollars(newBalance)
-  let updatedNum = Number(input) + Number(props.quantity);
-  props.setItem(updatedNum)
+  {max === 0 ? (alert(`You don't have enough money to buy any.`),setInput('')):(purchase(cost), props.setItem(max + props.quantity), setInput(''))}
 }
 
 function sell() {
@@ -39,12 +33,20 @@ function sellAll() {
   setInput('')
 }
 
+{/*Updates dollars and quantities*/}
+function purchase(cost: number) {
+  let newBalance = props.dollars - cost
+  props.setDollars(newBalance)
+  let updatedNum = Number(input) + Number(props.quantity);
+  props.setItem(updatedNum)
+}
+
 {/*prevent auto refresh*/}
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 }
 
-{/*makes sure only numbers are input (still allows e for some reason)*/}
+{/*make sure only numbers are input (still allows e for some reason)*/}
 const numChecker = (e: any) => {
   const re = /^[0-9\b]+$/;
   if (e.target.value === '' || re.test(e.target.value)) {
@@ -80,16 +82,16 @@ const numChecker = (e: any) => {
         <div className="row">
             <div className="col">
             <input id='input' className='form-control' type='number' value={input} onChange={numChecker}></input>
-            <div className="form-text" id="basic-addon4">You can afford {Math.floor(props.dollars/props.veggieNum)}</div>
+            <div className="text-under-input" id="basic-addon4">You can afford {Math.floor(props.dollars/props.veggieNum)}</div>
             </div>
             <div className="col">
-            <button className="btn btn-outline-success" onClick={checkMoney}>Buy</button>
+            <button className="btn btn-outline-success" onClick={buy}>Buy</button>
             </div>
             <div className='col'>
             <button className="btn btn-outline-danger" onClick={sell}>Sell</button>
             </div>
             <div className="col">
-            <button className="btn btn-outline-warning" onClick={checkMoneyAll}>Buy All</button>
+            <button className="btn btn-outline-warning" onClick={buyAll}>Buy All</button>
             </div>
             <div className='col'>
             <button className="btn btn-outline-warning" onClick={sellAll}>Sell All</button>
