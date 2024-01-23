@@ -81,7 +81,7 @@ const numChecker = (e: any) => {
       <form onChange={handleFormSubmit} onSubmit={handleFormSubmit}>
         <div className="row">
             <div className="col">
-            <input id='input' className='form-control' type='number' value={input} onChange={numChecker}></input>
+            <input id='input' className='form-control no-arrows' type='number' value={input} onChange={numChecker}></input>
             <div className="text-under-input" id="basic-addon4">You can afford {Math.floor(props.dollars/props.veggieNum)}</div>
             </div>
             <div className="col">

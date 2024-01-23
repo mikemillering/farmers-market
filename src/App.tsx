@@ -35,7 +35,7 @@ export default function App() {
     <button
       style={{ margin: "40px 20px 20px 20px" }}
       className="btn btn-outline-white text-white bg-success custom-button"
-      onClick={nextDay}
+      onClick={newGame}
     >
       LAST WEEKEND!
     </button>
@@ -72,16 +72,17 @@ export default function App() {
   }
 
   function sellAllAtEnd() {
-    let totalSale =
-      tomatoes * tomatoesNum +
-      carrots * carrotsNum +
-      lettuce * lettuceNum +
-      eggplant * eggplantNum;
+    let totalSale = tomatoes * tomatoesNum + carrots * carrotsNum + lettuce * lettuceNum + eggplant * eggplantNum;
+    console.log(totalSale + 'total sale' + dollars + 'dollars')
     let newDollars = totalSale + Number(dollars);
-    setDollars(newDollars+ dollars);
-    alert("Congrats! You ended up with $" + newDollars + " dollars.");
+    setDollars(newDollars);
+    console.log(newDollars + 'new dollars')
+    setMessage("Congrats! You ended up with $" + newDollars + " dollars.");
     const userWithHighScore = { user: userInput, score: newDollars };
     setHighScore([...highScore, userWithHighScore]);
+  }
+
+  function newGame() {
     setDays(10);
     setDollars(1000);
     setTomatoes(0);
@@ -90,6 +91,7 @@ export default function App() {
     setEggplant(0);
     setMessage("Welcome to the Farmers Market!");
   }
+
   {/*supposed to reset daily prices BEFORE multiplier effects*/}
   function setDailyPrices() {
     setTomatoesNum(getRandomNumber(1, 10));
@@ -101,6 +103,7 @@ export default function App() {
   function nextDay() {
     setDailyPrices();
     let newDays = days - 1;
+    console.log(newDays);
     if (newDays != 0) {
       eventFunction(eventArray);
       setDays(newDays);

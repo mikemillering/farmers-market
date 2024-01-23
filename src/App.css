@@ -32,3 +32,7 @@
   .text-under-input {
     font-size: 10px;
   }
+
+  .no-arrows {
+    -moz-appearance: textfield;
+  }
