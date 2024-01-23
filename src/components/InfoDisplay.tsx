@@ -81,14 +81,14 @@ const numChecker = (e: any) => {
       <form onChange={handleFormSubmit} onSubmit={handleFormSubmit}>
         <div className="row">
             <div className="col">
-            <input id='input' className='form-control no-arrows' type='number' value={input} onChange={numChecker}></input>
+            <input id='input' className='form-control no-arrows' type='number' value={input} placeholder="Qty" onChange={numChecker}></input>
             <div className="text-under-input" id="basic-addon4">You can afford {Math.floor(props.dollars/props.veggieNum)}</div>
             </div>
             <div className="col">
-            <button className="btn btn-outline-success" onClick={buy}>Buy</button>
+            <button className="btn btn-outline-success" onClick={buy}>Buy Qty</button>
             </div>
             <div className='col'>
-            <button className="btn btn-outline-danger" onClick={sell}>Sell</button>
+            <button className="btn btn-outline-danger" onClick={sell}>Sell Qty</button>
             </div>
             <div className="col">
             <button className="btn btn-outline-warning" onClick={buyAll}>Buy All</button>

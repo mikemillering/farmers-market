@@ -17,106 +17,147 @@ export default function App() {
   const [highScore, setHighScore] = useState([]);
   const [userInput, setUserInput] = useState("");
   const [message, setMessage] = useState("Welcome to the Farmers Market!");
+  const [newButton, setNewButton] = useState(<button
+    style={{ margin: "40px 20px 20px 20px",  width: "200px"}}
+    
+    className="btn btn-outline-white text-white bg-success custom-button"
+    onClick={nextDay}
+  >
+    Next Weekend s - {days} left.
+  </button>);
+  
+  useEffect(() => {
+    conditionalButton();
+  }, [days]);
 
   let introMessage =
     "You have 10 weekends to make as much money as possible. Enter your initials above and then start your summer! Keep an eye out for messages about price changes.";
 
-  const weekendButton = (
-    <button
-      style={{ margin: "40px 20px 20px 20px" }}
-      className="btn btn-outline-white text-white bg-success custom-button"
-      onClick={nextDay}
-    >
-      Next Weekend - {days} left.
-    </button>
-  );
+    {/*FUNCTIONS*/}
 
-  const lastWeekendButton = (
-    <button
-      style={{ margin: "40px 20px 20px 20px" }}
-      className="btn btn-outline-white text-white bg-success custom-button"
-      onClick={newGame}
+  function conditionalButton() {
+    let gameButton = <button></button>;
+  days === 1 ? gameButton = <button
+  style={{ margin: "40px 20px 20px 20px",  width: "200px"}}
+  
+  className="btn btn-outline-white text-white bg-warning custom-button"
+  onClick={sellAllAtEnd}
+  >
+  Last Weekend!
+</button> 
+: days === 0 ? 
+gameButton = <button
+    style={{ margin: "40px 20px 20px 200px",  width: "200px"}}
+      className="btn btn-outline-white text-white bg-danger custom-button"
+      onClick={sellAllAtEnd}
     >
-      LAST WEEKEND!
-    </button>
-  );
+      New Game
+</button> 
+: 
+gameButton = <button
+style={{ margin: "40px 20px 20px 20px",  width: "200px"}}
 
+className="btn btn-outline-white text-white bg-success custom-button"
+onClick={nextDay}
+>
+Next Weekend - {days} left.
+</button>;
+setNewButton(gameButton);
+  };
+
+
+{/*Array of events*/}
   const eventArray = [
-    (multiplier) => {
+    (multiplier: number) => {
       setTomatoesNum(Math.round(tomatoesNum * multiplier));
       setMessage("Tomatoes have increased in price!");
-      console.log(multiplier)
+
     },
-    (multiplier) => {
+    (multiplier: number) => {
       setCarrotsNum(Math.round(carrotsNum * multiplier));
       setMessage("Carrots have increased in price!");
     },
-    (multiplier) => {
+    (multiplier: number) => {
       setLettuceNum(Math.round(lettuceNum * multiplier));
       setMessage("Lettuce prices have been cut!");
     },
-    (multiplier) => {
+    (multiplier: number) => {
       setEggplantNum(Math.round(eggplantNum * multiplier));
       setMessage("Eggplants have increased in price!");
     },
   ];
 
-  function getRandomNumber(min, max) {
+  {
+    /*  FUNCTIONS  */
+  }
+
+  function getRandomNumber(min: number, max: number) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
-  function eventFunction(arr) {
-    const randomIndex = Math.floor(Math.random() * 4);
+  function nextDay() {
+    conditionalButton();
+    setDailyPrices();
+    setDays((prevDays) => prevDays - 1);
+    console.log('days ' + (days - 1));
+    if (days !== 1) {
+      eventFunction(eventArray);
+    } else {
+      sellAllAtEnd();
+    }
+  }
+
+  function eventFunction(arr: any) {
+    const randomIndex = getRandomNumber(0, 3);
     const randomMultiplier = getRandomNumber(2, 4);
     arr[randomIndex](randomMultiplier);
   }
 
-  function sellAllAtEnd() {
-    let totalSale = tomatoes * tomatoesNum + carrots * carrotsNum + lettuce * lettuceNum + eggplant * eggplantNum;
-    console.log(totalSale + 'total sale' + dollars + 'dollars')
-    let newDollars = totalSale + Number(dollars);
-    setDollars(newDollars);
-    console.log(newDollars + 'new dollars')
-    setMessage("Congrats! You ended up with $" + newDollars + " dollars.");
-    const userWithHighScore = { user: userInput, score: newDollars };
-    setHighScore([...highScore, userWithHighScore]);
+  {
+    /*supposed to reset daily prices BEFORE multiplier effects*/
   }
-
-  function newGame() {
-    setDays(10);
-    setDollars(1000);
-    setTomatoes(0);
-    setCarrots(0);
-    setLettuce(0);
-    setEggplant(0);
-    setMessage("Welcome to the Farmers Market!");
-  }
-
-  {/*supposed to reset daily prices BEFORE multiplier effects*/}
   function setDailyPrices() {
     setTomatoesNum(getRandomNumber(1, 10));
     setCarrotsNum(getRandomNumber(30, 10));
     setLettuceNum(getRandomNumber(50, 30));
     setEggplantNum(getRandomNumber(110, 70));
   }
-  
-  function nextDay() {
-    setDailyPrices();
-    let newDays = days - 1;
-    console.log(newDays);
-    if (newDays != 0) {
-      eventFunction(eventArray);
-      setDays(newDays);
+
+  function sellAllAtEnd() {
+    setDays(0);
+    if (days === 1){
+    console.log("sellAllAtEnd "+days);
+    let totalSale =
+      tomatoes * tomatoesNum +
+      carrots * carrotsNum +
+      lettuce * lettuceNum +
+      eggplant * eggplantNum;
+    let newDollars = totalSale + Number(dollars);
+    setDollars(newDollars);
+    setMessage("Congrats! You ended up with $" + newDollars + " dollars.");
+    const userWithHighScore = { user: userInput, score: newDollars };
+    setHighScore([...highScore, userWithHighScore]);
+    setTomatoes(0);
+    setCarrots(0);
+    setLettuce(0);
+    setEggplant(0);
     } else {
-      sellAllAtEnd();
-    }
+      newGame();
+    } 
+  }
+
+  function newGame() {
+    setDailyPrices();
+    setDays(10);
+    setDollars(1000);
+    setMessage("Welcome to the Farmers Market!");
   }
 
   return (
     <>
       <div className="container">
         <div className="">
-        <br></br>
+          <br></br>
           <div className="input-group mb3">
             <span className="input-group-text" id="basic-addon1">
               Enter initials:
@@ -202,7 +243,9 @@ export default function App() {
         </div>
       </div>
       <div className="container">
-        {days === 1 ? lastWeekendButton : weekendButton}
+        {/*{days === 0 ? newGameButton : weekendButton}*/}
+      
+      {newButton}
         <h3>High Scores:</h3>
         <ul>
           {highScore.map((score, index) => (
@@ -214,8 +257,9 @@ export default function App() {
   );
 }
 
-
 /*  
+
+    OLD EVENTS CODE
 
     const oddsNum = Math.floor(Math.random() * (3 - 2 + 1)) + 1;
 
@@ -318,5 +362,37 @@ export default function App() {
       break;
       }
       }
+
+
+    OLD BUTTON VARIABLES
+
+
+        const weekendButton = (    <button
+    style={{ margin: "40px 20px 20px 20px",  width: "200px"}}
+    
+    className="btn btn-outline-white text-white bg-success custom-button"
+    onClick={nextDay}
+  >
+    Next Weekend - {days} left.
+  </button>);
+  
+  let lastWeekendButton = (    <button
+    style={{ margin: "40px 20px 20px 20px",  width: "200px"}}
+    
+    className="btn btn-outline-white text-white bg-warning custom-button"
+    onClick={nextDay}
+  >
+    Last Weekend!
+  </button>);
+
+  let newGameButton = (
+    <button
+    style={{ margin: "40px 20px 20px 200px",  width: "200px"}}
+      className="btn btn-outline-white text-white bg-danger custom-button"
+      onClick={newGame}
+    >
+      New Game
+    </button>
+  );
 
 */
