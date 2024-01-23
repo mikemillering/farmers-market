@@ -7,11 +7,15 @@
 
   .border-radius {
     border-radius: 10px;
-    background-color: blue;
+    background: rgba(255, 255, 255, 0.9);
   }
 
   .badge-green {
     background-color: green;
+  }
+
+  #li {
+    margin: 10px;
   }
 
   .button-style {
@@ -35,4 +39,20 @@
 
   .no-arrows {
     -moz-appearance: textfield;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0; /* Set your desired background color or image */
+  }
+  
+  .container-main {
+    background: url('C:\Users\Mike\Projects\farmers-market\public\vegwall.jpg') center center fixed;
+    background-size: cover;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }

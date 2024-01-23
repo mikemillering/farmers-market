@@ -9,7 +9,7 @@ function buy() {
   let numInput = Number(input);
   let cost = numInput * props.veggieNum;
   let newAmount = props.dollars - cost;
-  {newAmount < 0 ? (alert(`You don't have that much money.`),setInput('')):(purchase(cost), setInput(''))}
+  {newAmount < 0 ? (alert(`You don't have that much money.`),setInput('')):(purchase(cost), props.setItem((prev: number) => prev + Number(input)), setInput(''))}
 }
 
 function buyAll() {
@@ -27,18 +27,14 @@ function sell() {
 
 function sellAll() {
   let totalSale = (props.quantity*props.veggieNum);
-  let newDollars =  totalSale + Number(props.dollars);
-  props.setDollars(newDollars)
+  props.setDollars((prev: number) => prev + totalSale)
   props.setItem(0)
   setInput('')
 }
 
 {/*Updates dollars and quantities*/}
 function purchase(cost: number) {
-  let newBalance = props.dollars - cost
-  props.setDollars(newBalance)
-  let updatedNum = Number(input) + Number(props.quantity);
-  props.setItem(updatedNum)
+  props.setDollars((prev: number) => prev - cost);
 }
 
 {/*prevent auto refresh*/}

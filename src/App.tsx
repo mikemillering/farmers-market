@@ -17,6 +17,7 @@ export default function App() {
   const [highScore, setHighScore] = useState([]);
   const [userInput, setUserInput] = useState("");
   const [message, setMessage] = useState("Welcome to the Farmers Market!");
+  const [introMessage, setIntroMessage] = useState("You have 10 weekends to make as much money as possible. Enter your initials above and then start your summer! Keep an eye out for messages about price changes.");
   const [newButton, setNewButton] = useState(<button
     style={{ margin: "40px 20px 20px 20px",  width: "200px"}}
     
@@ -30,11 +31,57 @@ export default function App() {
     conditionalButton();
   }, [days]);
 
-  let introMessage =
-    "You have 10 weekends to make as much money as possible. Enter your initials above and then start your summer! Keep an eye out for messages about price changes.";
+  {/*Arrays of events*/}
+  const eventArray = [
+    (multiplier: number) => {
+      setTomatoesNum(Math.round(tomatoesNum * multiplier));
+      setMessage("Tomatoes have increased in price!");
+
+    },
+    (multiplier: number) => {
+      setCarrotsNum(Math.round(carrotsNum * multiplier));
+      setMessage("Carrots have increased in price!");
+    },
+    (multiplier: number) => {
+      setLettuceNum(Math.round(lettuceNum * multiplier));
+      setMessage("Lettuce prices have increased!");
+    },
+    (multiplier: number) => {
+      setEggplantNum(Math.round(eggplantNum * multiplier));
+      setMessage("Eggplants have increased in price!");
+    },
+  ];
+
+  const alertArray = [
+    () => {
+      alert("👽 UFO Invasion! A UFO just landed at the farmers market!👽 The aliens use their tech to double your tomato inventory!");
+      setTomatoes((prev) => prev * 2);
+    },
+    () => {
+      alert("👽 UFO Invasion! A UFO just landed at the farmers market!👽 The aliens brought advanced technology. All your vegetable prices increased!");
+      setTomatoesNum(Math.round(tomatoesNum * 1.6));
+      setCarrotsNum(Math.round(carrotsNum * 1.6));
+      setLettuceNum(Math.round(lettuceNum * 1.6));
+      setEggplantNum(Math.round(eggplantNum * 1.6));
+    },
+    () => {
+      alert("👽 UFO Invasion! A UFO just landed at the farmers market!👽 The aliens flooded the market with eggplants and carrots and prices have dropped!");
+      setEggplantNum(Math.round(eggplantNum / 3));
+      setCarrotsNum(Math.round(carrotsNum / 3));
+    },
+    () => {
+      Math.round(eggplant / 1.5) < 1 ? (alert("👽 UFO Invasion! A UFO just landed at the farmers market!👽 Your eggplants have offended the Aliens, they have taken a third"), setEggplant((prev) => Math.round(prev / 1.5))) 
+      : alert("👽 UFO Invasion! A UFO just landed at the farmers market!👽 the aliens were angered by the eggplans and all the stall with them have been incinerated! Luckily you didn't have enough.")
+    },
+  ];
 
     {/*FUNCTIONS*/}
 
+    function getRandomNumber(min: number, max: number) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    {/*Changes game button by days*/}
   function conditionalButton() {
     let gameButton = <button></button>;
   days === 1 ? gameButton = <button
@@ -65,34 +112,24 @@ Next Weekend - {days} left.
 setNewButton(gameButton);
   };
 
-
-{/*Array of events*/}
-  const eventArray = [
-    (multiplier: number) => {
-      setTomatoesNum(Math.round(tomatoesNum * multiplier));
-      setMessage("Tomatoes have increased in price!");
-
-    },
-    (multiplier: number) => {
-      setCarrotsNum(Math.round(carrotsNum * multiplier));
-      setMessage("Carrots have increased in price!");
-    },
-    (multiplier: number) => {
-      setLettuceNum(Math.round(lettuceNum * multiplier));
-      setMessage("Lettuce prices have been cut!");
-    },
-    (multiplier: number) => {
-      setEggplantNum(Math.round(eggplantNum * multiplier));
-      setMessage("Eggplants have increased in price!");
-    },
-  ];
-
-  {
-    /*  FUNCTIONS  */
+  function setDailyPrices() {
+    setTomatoesNum(getRandomNumber(1, 10));
+    setCarrotsNum(getRandomNumber(30, 10));
+    setLettuceNum(getRandomNumber(50, 30));
+    setEggplantNum(getRandomNumber(110, 70));
   }
 
-  function getRandomNumber(min: number, max: number) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
+  function normalEvent(arr: any) {
+    const oneInThree = getRandomNumber(0, 3);
+    const randomMultiplier = getRandomNumber(2, 4);
+    arr[oneInThree](randomMultiplier);
+  }
+
+  function alienEvent(arr: any) {
+    const oneInTen = getRandomNumber(0, 10);
+    const oneInThree = getRandomNumber(0, 3);
+    //oneInTen === 5 ? arr[oneInThree](): null;
+    arr[3]()
   }
 
   function nextDay() {
@@ -101,26 +138,11 @@ setNewButton(gameButton);
     setDays((prevDays) => prevDays - 1);
     console.log('days ' + (days - 1));
     if (days !== 1) {
-      eventFunction(eventArray);
+      normalEvent(eventArray);
+      alienEvent(alertArray);
     } else {
       sellAllAtEnd();
     }
-  }
-
-  function eventFunction(arr: any) {
-    const randomIndex = getRandomNumber(0, 3);
-    const randomMultiplier = getRandomNumber(2, 4);
-    arr[randomIndex](randomMultiplier);
-  }
-
-  {
-    /*supposed to reset daily prices BEFORE multiplier effects*/
-  }
-  function setDailyPrices() {
-    setTomatoesNum(getRandomNumber(1, 10));
-    setCarrotsNum(getRandomNumber(30, 10));
-    setLettuceNum(getRandomNumber(50, 30));
-    setEggplantNum(getRandomNumber(110, 70));
   }
 
   function sellAllAtEnd() {
@@ -151,11 +173,13 @@ setNewButton(gameButton);
     setDays(10);
     setDollars(1000);
     setMessage("Welcome to the Farmers Market!");
+    setIntroMessage('');
   }
 
   return (
     <>
-      <div className="container">
+    <div className="container-main">
+      <div className="container border-radius">
         <div className="">
           <br></br>
           <div className="input-group mb3">
@@ -174,12 +198,12 @@ setNewButton(gameButton);
           </div>
         </div>
         <br></br>
-        <h1 className="text-center">Farmers Market</h1>
+        <h1 className="text-center text-success">Farmers Market</h1>
 
         <div className="container">
           <h2
             style={{ margin: "20px 20px 20px 20px" }}
-            className="border-radius justify-content-between align-items-center text-white text-center"
+            className="border-radius justify-content-between align-items-center text-center"
           >
             You have
             <span className="badge-green badge rounded-pill m-1">
@@ -191,7 +215,7 @@ setNewButton(gameButton);
             {message}
           </h5>
           <h6 className="justify-content-between align-items-center text-center">
-            {days === 10 ? introMessage : <br></br>}
+            {days === 10 ? introMessage : null}
           </h6>
           <p></p>
         </div>
@@ -242,16 +266,18 @@ setNewButton(gameButton);
           </div>
         </div>
       </div>
-      <div className="container">
-        {/*{days === 0 ? newGameButton : weekendButton}*/}
-      
-      {newButton}
-        <h3>High Scores:</h3>
-        <ul>
+      <div className="container border-radius">
+        {newButton}
+        <h3 className="text-center mt-4 border-radius">High Scores:</h3>
+        <ul className="list-group">
           {highScore.map((score, index) => (
-            <li key={index}>{`${score.user} $${score.score}`}</li>
+            <li className='bodrer-radius' key={index} className="list-group-item">
+              {`${score.user} $${score.score.toLocaleString()}`}
+            </li>
           ))}
         </ul>
+      </div>
+
       </div>
     </>
   );
