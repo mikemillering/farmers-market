@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
 import InfoDisplay from "./components/InfoDisplay";
+import vegwallImage from "../Public/vegwall.jpg";
+import ButtonDisplay from "./components/ButtonDisplay";
+
+
+interface highScore {
+  user: string;
+  score: number;
+}
 
 export default function App() {
   const [tomatoes, setTomatoes] = useState(0);
@@ -12,24 +20,15 @@ export default function App() {
   const [eggplant, setEggplant] = useState(0);
   const [eggplantNum, setEggplantNum] = useState(getRandomNumber(110, 70));
 
-  const [days, setDays] = useState(10);
+
+  const [days, setDays] = useState(11);
   const [dollars, setDollars] = useState(1000);
-  const [highScore, setHighScore] = useState([]);
+  const [highScore, setHighScore] = useState<highScore[]>([]);
   const [userInput, setUserInput] = useState("");
   const [message, setMessage] = useState("Welcome to the Farmers Market!");
-  const [introMessage, setIntroMessage] = useState("You have 10 weekends to make as much money as possible. Enter your initials above and then start your summer! Keep an eye out for messages about price changes.");
-  const [newButton, setNewButton] = useState(<button
-    style={{ margin: "40px 20px 20px 20px",  width: "200px"}}
-    
-    className="btn btn-outline-white text-white bg-success custom-button"
-    onClick={nextDay}
-  >
-    Next Weekend s - {days} left.
-  </button>);
-  
-  useEffect(() => {
-    conditionalButton();
-  }, [days]);
+  const [introMessage, setIntroMessage] = useState("You have 10 weekends to make as much money as possible. Enter your initials below and then start your summer! Keep an eye out for messages about price changes.");
+
+
 
   {/*Arrays of events*/}
   const eventArray = [
@@ -81,37 +80,6 @@ export default function App() {
       return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
-    {/*Changes game button by days*/}
-  function conditionalButton() {
-    let gameButton = <button></button>;
-  days === 1 ? gameButton = <button
-  style={{ margin: "40px 20px 20px 20px",  width: "200px"}}
-  
-  className="btn btn-outline-white text-white bg-warning custom-button"
-  onClick={sellAllAtEnd}
-  >
-  Last Weekend!
-</button> 
-: days === 0 ? 
-gameButton = <button
-    style={{ margin: "40px 20px 20px 200px",  width: "200px"}}
-      className="btn btn-outline-white text-white bg-danger custom-button"
-      onClick={sellAllAtEnd}
-    >
-      New Game
-</button> 
-: 
-gameButton = <button
-style={{ margin: "40px 20px 20px 20px",  width: "200px"}}
-
-className="btn btn-outline-white text-white bg-success custom-button"
-onClick={nextDay}
->
-Next Weekend - {days} left.
-</button>;
-setNewButton(gameButton);
-  };
-
   function setDailyPrices() {
     setTomatoesNum(getRandomNumber(1, 10));
     setCarrotsNum(getRandomNumber(30, 10));
@@ -128,15 +96,13 @@ setNewButton(gameButton);
   function alienEvent(arr: any) {
     const oneInTen = getRandomNumber(0, 10);
     const oneInThree = getRandomNumber(0, 3);
-    //oneInTen === 5 ? arr[oneInThree](): null;
-    arr[3]()
+    oneInTen === 5 ? arr[oneInThree](): null;
   }
 
   function nextDay() {
-    conditionalButton();
+    console.log(days + ' days')
     setDailyPrices();
     setDays((prevDays) => prevDays - 1);
-    console.log('days ' + (days - 1));
     if (days !== 1) {
       normalEvent(eventArray);
       alienEvent(alertArray);
@@ -144,9 +110,9 @@ setNewButton(gameButton);
       sellAllAtEnd();
     }
   }
-
+  
   function sellAllAtEnd() {
-    setDays(0);
+    
     if (days === 1){
     console.log("sellAllAtEnd "+days);
     let totalSale =
@@ -163,6 +129,7 @@ setNewButton(gameButton);
     setCarrots(0);
     setLettuce(0);
     setEggplant(0);
+    setDays(0);
     } else {
       newGame();
     } 
@@ -172,17 +139,38 @@ setNewButton(gameButton);
     setDailyPrices();
     setDays(10);
     setDollars(1000);
-    setMessage("Welcome to the Farmers Market!");
-    setIntroMessage('');
-  }
+    setMessage("Welcome to the Farmers Market!");  }
 
   return (
     <>
     <div className="container-main">
+    <div className="row">  
+    <div className="col-12">
       <div className="container border-radius">
-        <div className="">
-          <br></br>
-          <div className="input-group mb3">
+        {days === 11 ? 
+        <h1 className="text-center text-success">Farmers Market</h1>
+        : null}
+        <div className="container">
+          {days === 11 || days === 0 ? null : 
+          <h2
+            style={{ margin: "20px 20px 20px 20px" }}
+            className="border-radius justify-content-between align-items-center text-center"
+          >
+            You have
+            <span className="badge-green badge rounded-pill m-1">
+              ${dollars}
+            </span>
+            dollars
+          </h2>
+}
+          <h5 className="justify-content-between align-items-center text-center">
+            {message}
+          </h5>
+          <h6 className="justify-content-between align-items-center text-center">
+            {days === 11 ? introMessage : null}
+          </h6>
+          {days === 11 ? 
+          <div className="input-group p-1">
             <span className="input-group-text" id="basic-addon1">
               Enter initials:
             </span>
@@ -195,32 +183,14 @@ setNewButton(gameButton);
               onChange={(e) => setUserInput(e.target.value)}
               maxLength={3}
             />
+            
           </div>
+          
+          : null }
         </div>
-        <br></br>
-        <h1 className="text-center text-success">Farmers Market</h1>
-
-        <div className="container">
-          <h2
-            style={{ margin: "20px 20px 20px 20px" }}
-            className="border-radius justify-content-between align-items-center text-center"
-          >
-            You have
-            <span className="badge-green badge rounded-pill m-1">
-              ${dollars}
-            </span>
-            dollars
-          </h2>
-          <h5 className="justify-content-between align-items-center text-center">
-            {message}
-          </h5>
-          <h6 className="justify-content-between align-items-center text-center">
-            {days === 10 ? introMessage : null}
-          </h6>
-          <p></p>
-        </div>
+        {days === 11 || days === 0 ? null : 
         <div className="row">
-          <div className="col">
+          <div className="col-12">
             <InfoDisplay
               quantity={tomatoes}
               name={"Tomatoes"}
@@ -242,7 +212,7 @@ setNewButton(gameButton);
               veggieNum={carrotsNum}
             />
           </div>
-          <div className="col">
+          <div className="col-12">
             <InfoDisplay
               quantity={lettuce}
               name={"Lettuce"}
@@ -265,19 +235,27 @@ setNewButton(gameButton);
             />
           </div>
         </div>
+}
       </div>
-      <div className="container border-radius">
-        {newButton}
-        <h3 className="text-center mt-4 border-radius">High Scores:</h3>
+      <div className="row">
+        <div className="col-12 offset-2">
+        <ButtonDisplay days={days} nextDay={nextDay} sellAllAtEnd={sellAllAtEnd} newGame={newGame} />
+        </div>
+        </div>
+        {days === 0 ?
+        <div className="conatiner border-radius p-3">
+        <h3 className="text-center border-radius">High Scores:</h3>
         <ul className="list-group">
           {highScore.map((score, index) => (
-            <li className='bodrer-radius' key={index} className="list-group-item">
+            <li className='border-radius list-group-item' key={index}>
               {`${score.user} $${score.score.toLocaleString()}`}
             </li>
           ))}
         </ul>
-      </div>
-
+        </div>
+         : null }
+         </div>
+</div>
       </div>
     </>
   );

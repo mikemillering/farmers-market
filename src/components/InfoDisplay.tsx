@@ -73,24 +73,24 @@ const numChecker = (e: any) => {
             Todays Value: ${props.veggieNum}
           </span>
         </li>
+        <div style={{ textAlign: 'center' }} className="text-under-input" id="basic-addon4">You can afford {Math.floor(props.dollars/props.veggieNum)}</div>
       </ul>
       <form onChange={handleFormSubmit} onSubmit={handleFormSubmit}>
-        <div className="row">
+        <div className="row p-1">
             <div className="col">
-            <input id='input' className='form-control no-arrows' type='number' value={input} placeholder="Qty" onChange={numChecker}></input>
-            <div className="text-under-input" id="basic-addon4">You can afford {Math.floor(props.dollars/props.veggieNum)}</div>
+            <input id='input' className='form-control no-arrows h-10 input-height' type='number' value={input} placeholder="Qty" onChange={numChecker}></input>
             </div>
             <div className="col">
-            <button className="btn btn-outline-success" onClick={buy}>Buy Qty</button>
+            <button className="btn btn-sm btn-outline-success" onClick={buy}>Buy Qty</button>
             </div>
             <div className='col'>
-            <button className="btn btn-outline-danger" onClick={sell}>Sell Qty</button>
+            <button className="btn btn-sm btn-outline-danger" onClick={sell}>Sell Qty</button>
             </div>
             <div className="col">
-            <button className="btn btn-outline-warning" onClick={buyAll}>Buy All</button>
+            <button className="btn btn-sm btn-outline-warning" onClick={buyAll}>Buy All</button>
             </div>
             <div className='col'>
-            <button className="btn btn-outline-warning" onClick={sellAll}>Sell All</button>
+            <button className="btn btn-sm btn-outline-warning" onClick={sellAll}>Sell All</button>
             </div>
         </div>
       </form>
