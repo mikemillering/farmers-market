@@ -19,6 +19,15 @@ export default function App() {
   const [lettuceNum, setLettuceNum] = useState(getRandomNumber(50, 30));
   const [eggplant, setEggplant] = useState(0);
   const [eggplantNum, setEggplantNum] = useState(getRandomNumber(110, 70));
+  
+  const [tomatoColor, setTomatoColor] = useState("primary");
+  const [carrotColor, setCarrotColor] = useState("primary");
+  const [lettuceColor, setLettuceColor] = useState("primary");
+  const [eggplantColor, setEggplantColor] = useState("primary");
+  const [tomatoQuantityColor, setTomatoQuantityColor] = useState("primary");
+  const [carrotQuantityColor, setCarrotQuantityColor] = useState("primary");
+  const [lettuceQuantityColor, setLettuceQuantityColor] = useState("primary");
+  const [eggplantQuantityColor, setEggplantQuantityColor] = useState("primary");
 
 
   const [days, setDays] = useState(11);
@@ -26,28 +35,35 @@ export default function App() {
   const [highScore, setHighScore] = useState<highScore[]>([]);
   const [userInput, setUserInput] = useState("");
   const [message, setMessage] = useState("Welcome to the Farmers Market!");
-  const [introMessage, setIntroMessage] = useState("You have 10 weekends to make as much money as possible. Enter your initials below and then start your summer! Keep an eye out for messages about price changes.");
 
-
+  const introMessage = "You have 10 days to make as much money as possible. Buy low, sell high!";
 
   {/*Arrays of events*/}
   const eventArray = [
     (multiplier: number) => {
       setTomatoesNum(Math.round(tomatoesNum * multiplier));
       setMessage("Tomatoes have increased in price!");
-
+      setTomatoColor("success");
     },
     (multiplier: number) => {
       setCarrotsNum(Math.round(carrotsNum * multiplier));
       setMessage("Carrots have increased in price!");
+      setCarrotColor("success");
     },
     (multiplier: number) => {
       setLettuceNum(Math.round(lettuceNum * multiplier));
       setMessage("Lettuce prices have increased!");
+      setLettuceColor("success");
     },
     (multiplier: number) => {
       setEggplantNum(Math.round(eggplantNum * multiplier));
       setMessage("Eggplants have increased in price!");
+      setEggplantColor("success");
+    },
+    (multiplier: number) => {
+      setEggplantNum(Math.round(eggplantNum / multiplier));
+      setMessage("Eggplants have decreased in price!");
+      setEggplantColor("danger");
     },
   ];
 
@@ -55,6 +71,7 @@ export default function App() {
     () => {
       alert("👽 UFO Invasion! A UFO just landed at the farmers market!👽 The aliens use their tech to double your tomato inventory!");
       setTomatoes((prev) => prev * 2);
+      setTomatoQuantityColor("success");
     },
     () => {
       alert("👽 UFO Invasion! A UFO just landed at the farmers market!👽 The aliens brought advanced technology. All your vegetable prices increased!");
@@ -62,15 +79,19 @@ export default function App() {
       setCarrotsNum(Math.round(carrotsNum * 1.6));
       setLettuceNum(Math.round(lettuceNum * 1.6));
       setEggplantNum(Math.round(eggplantNum * 1.6));
+      priceColorChanger('success');
     },
     () => {
       alert("👽 UFO Invasion! A UFO just landed at the farmers market!👽 The aliens flooded the market with eggplants and carrots and prices have dropped!");
       setEggplantNum(Math.round(eggplantNum / 3));
       setCarrotsNum(Math.round(carrotsNum / 3));
+      setEggplantColor("danger");
+      setCarrotColor("danger");
     },
     () => {
       Math.round(eggplant / 1.5) < 1 ? (alert("👽 UFO Invasion! A UFO just landed at the farmers market!👽 Your eggplants have offended the Aliens, they have taken a third"), setEggplant((prev) => Math.round(prev / 1.5))) 
       : alert("👽 UFO Invasion! A UFO just landed at the farmers market!👽 the aliens were angered by the eggplans and all the stall with them have been incinerated! Luckily you didn't have enough.")
+      setEggplantQuantityColor("danger");
     },
   ];
 
@@ -87,10 +108,24 @@ export default function App() {
     setEggplantNum(getRandomNumber(110, 70));
   }
 
+  function priceColorChanger(color: string) {
+    setTomatoColor(color);
+    setCarrotColor(color);
+    setLettuceColor(color);
+    setEggplantColor(color); 
+  }
+
+  function quantityColorChanger(color: string) {
+    setTomatoQuantityColor(color);
+    setCarrotQuantityColor(color);
+    setLettuceQuantityColor(color);
+    setEggplantQuantityColor(color); 
+  }
+
   function normalEvent(arr: any) {
-    const oneInThree = getRandomNumber(0, 3);
+    const oneInFour = getRandomNumber(0, 4);
     const randomMultiplier = getRandomNumber(2, 4);
-    arr[oneInThree](randomMultiplier);
+    arr[oneInFour](randomMultiplier);
   }
 
   function alienEvent(arr: any) {
@@ -104,6 +139,8 @@ export default function App() {
     setDailyPrices();
     setDays((prevDays) => prevDays - 1);
     if (days !== 1) {
+      quantityColorChanger('primary');
+      priceColorChanger('primary');
       normalEvent(eventArray);
       alienEvent(alertArray);
     } else {
@@ -169,7 +206,7 @@ export default function App() {
           <h6 className="justify-content-between align-items-center text-center">
             {days === 11 ? introMessage : null}
           </h6>
-          {days === 11 ? 
+          {days === 11 || days === 10 ? 
           <div className="input-group p-1">
             <span className="input-group-text" id="basic-addon1">
               Enter initials:
@@ -200,6 +237,8 @@ export default function App() {
               setItem={setTomatoes}
               setDollars={setDollars}
               veggieNum={tomatoesNum}
+              priceColor={tomatoColor}
+              quantityColor={tomatoQuantityColor}
             />
             <InfoDisplay
               quantity={carrots}
@@ -210,6 +249,8 @@ export default function App() {
               setItem={setCarrots}
               setDollars={setDollars}
               veggieNum={carrotsNum}
+              priceColor={carrotColor}
+              quantityColor={carrotQuantityColor}
             />
           </div>
           <div className="col-12">
@@ -222,6 +263,8 @@ export default function App() {
               setItem={setLettuce}
               setDollars={setDollars}
               veggieNum={lettuceNum}
+              priceColor={lettuceColor}
+              quantityColor={lettuceQuantityColor}
             />
             <InfoDisplay
               quantity={eggplant}
@@ -232,6 +275,8 @@ export default function App() {
               setItem={setEggplant}
               setDollars={setDollars}
               veggieNum={eggplantNum}
+              priceColor={eggplantColor}
+              quantityColor={eggplantQuantityColor}
             />
           </div>
         </div>
@@ -260,143 +305,3 @@ export default function App() {
     </>
   );
 }
-
-/*  
-
-    OLD EVENTS CODE
-
-    const oddsNum = Math.floor(Math.random() * (3 - 2 + 1)) + 1;
-
-      const oneInThree = Math.floor(Math.random() * 3) === 0;
-      if (oneInThree) {
-      const randomChild = Math.floor(Math.random() * 2); // 4 children (tomatoes, carrots, lettuce, eggplant)
-      
-      switch (randomChild) {
-      case 0:
-      alert("Elon Musk tweeted that carrots cause cancer. Prices are down.");
-      setCarrotsNum(carrotsNum / 2);
-      break;
-      case 1:
-      alert("Salmonella outbreak! Lettuce prices have plumeted!");
-      setLettuceNum(lettuceNum / oddsNum);
-      break;
-      default:
-      break;
-      }
-      }
-      
-      const anotherOneInThree = Math.floor(Math.random() * 3) === 0;
-      if (anotherOneInThree) {
-      const randomChild = Math.floor(Math.random() * 4); // 4 children (tomatoes, carrots, lettuce, eggplant)
-      
-      switch (randomChild) {
-      case 0:
-      alert("Tomatoes price doubled!");
-      setTomatoesNum(tomatoesNum * 2);
-      break;
-      case 1:
-      alert("Rabbits invaded the farmers market and at your competetors carrots! Prices increased!");
-      setCarrotsNum(carrotsNum * (oddsNum*1.5));
-      break;
-      case 2:
-      alert("Lettuce celebrate, lettuce prices have skyrocketed!");
-      setLettuceNum(lettuceNum * (oddsNum*1.5));
-      break;
-      case 3:
-      alert("Eggplant blight! Eggplant prices are egg-stremely high!");
-      setEggplantNum(eggplantNum * oddsNum);
-      break;
-      default:
-      break;
-      }
-      }
-      
-      const oneInTwo = Math.floor(Math.random() * 2) === 0;
-      if (oneInTwo) {
-      const randomChild = Math.floor(Math.random() * 4); // 4 children (tomatoes, carrots, lettuce, eggplant)
-      
-      switch (randomChild) {
-      case 0:
-      alert("Some of your tomatoes rolled away!");
-      setTomatoes(Math.round(tomatoes / 1.3));
-      break;
-      case 1:
-      alert("Rabbits invaded your booth. They ate some of your carrots!");
-      setCarrots(Math.round(carrots / 1.2));
-      break;
-      case 2:
-      alert("Some of your lettuce went rotten!");
-      setLettuce(Math.round(Math.round(lettuce / 1.1)));
-      break;
-      case 3:
-      alert("Your Eggplant inventory magically doubled! How did that happen?");
-      setEggplant(eggplant * 2);
-      break;
-      default:
-      break;
-      }
-      }
-      
-      const oneInTen = Math.floor(Math.random() * 10) === 0;
-      if (oneInTen) {
-      
-      const randomChild = Math.floor(Math.random() * 4); // Three possible outcomes
-      
-      switch (randomChild) {
-      case 0:
-      alert("👽 UFO Invasion! A UFO just landed at your farmers market!👽 The UFO loves tomatoed and your tomato prices quadrupled");
-      setTomatoesNum(tomatoesNum * 4);
-      break;
-      case 1:
-      alert("👽 UFO Invasion! A UFO just landed at your farmers market!👽 The UFO brought advanced technology. All your vegetable prices increased!");
-      setTomatoesNum(Math.round(tomatoesNum * 1.6));
-      setCarrotsNum(Math.round(carrotsNum * 1.6));
-      setLettuceNum(Math.round(lettuceNum * 1.6));
-      setEggplantNum(Math.round(eggplantNum * 1.6));
-      break;
-      case 2:
-      alert("👽 UFO Invasion! A UFO just landed at your farmers market!👽 The aliens took a liking to eggplants and prices skyrocketed!");
-      setEggplantNum(eggplantNum * 3);
-      break;
-      case 3:
-      alert("👽 UFO Invasion! A UFO just landed at your farmers market!👽 Your carrots have offended the Aliens, they have been destroyed!");
-      setCarrots(0);
-      break;
-      default:
-      break;
-      }
-      }
-
-
-    OLD BUTTON VARIABLES
-
-
-        const weekendButton = (    <button
-    style={{ margin: "40px 20px 20px 20px",  width: "200px"}}
-    
-    className="btn btn-outline-white text-white bg-success custom-button"
-    onClick={nextDay}
-  >
-    Next Weekend - {days} left.
-  </button>);
-  
-  let lastWeekendButton = (    <button
-    style={{ margin: "40px 20px 20px 20px",  width: "200px"}}
-    
-    className="btn btn-outline-white text-white bg-warning custom-button"
-    onClick={nextDay}
-  >
-    Last Weekend!
-  </button>);
-
-  let newGameButton = (
-    <button
-    style={{ margin: "40px 20px 20px 200px",  width: "200px"}}
-      className="btn btn-outline-white text-white bg-danger custom-button"
-      onClick={newGame}
-    >
-      New Game
-    </button>
-  );
-
-*/

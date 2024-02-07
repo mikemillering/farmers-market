@@ -61,15 +61,15 @@ const numChecker = (e: any) => {
           {props.name}
           <span
             className={
-              Number(props.quantity) < 5
-                ? "badge bg-warning badge-pill text-black m-1"
+              Number(props.quantity) < 1
+                ? "badge bg-warning badge-pill text-black m-1" //add quantity color here
                 : "badge bg-primary badge-pill text-white m-1"
             }
           >
             You Have: {props.quantity}
           </span>
           <span
-            className="badge bg-success badge-pill text-white m-1">
+            className={'badge bg-' + props.priceColor + ' badge-pill text-black m-1'}>
             Todays Value: ${props.veggieNum}
           </span>
         </li>
