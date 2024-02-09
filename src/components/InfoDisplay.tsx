@@ -63,7 +63,7 @@ const numChecker = (e: any) => {
             className={
               Number(props.quantity) < 1
                 ? "badge bg-warning badge-pill text-black m-1" //add quantity color here
-                : "badge bg-primary badge-pill text-white m-1"
+                : "badge bg-" + props.quantityColor + " badge-pill text-white m-1"
             }
           >
             You Have: {props.quantity}

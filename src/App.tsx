@@ -206,7 +206,7 @@ export default function App() {
           <h6 className="justify-content-between align-items-center text-center">
             {days === 11 ? introMessage : null}
           </h6>
-          {days === 11 || days === 10 ? 
+          {days === 11 ? 
           <div className="input-group p-1">
             <span className="input-group-text" id="basic-addon1">
               Enter initials:
